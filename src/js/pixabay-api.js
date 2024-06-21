@@ -1,0 +1,20 @@
+export function getImages(inputValue) {
+  if (inputValue === '') {
+    return;
+  }
+  const BASE_URL = 'https://pixabay.com';
+  const END_POINT = '/api/';
+  const params = new URLSearchParams({
+    key: '44427326-e2b4a6eb28305d60c68b186c8',
+    q: inputValue,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+  });
+  const url = `${BASE_URL}${END_POINT}?${params}`;
+  return fetch(url)
+    .then(res => res.json())
+    .catch(err => {
+      console.log(err);
+    });
+}
