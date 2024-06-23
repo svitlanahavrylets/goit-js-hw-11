@@ -1,7 +1,7 @@
 export function getImages(inputValue) {
-  if (inputValue === '') {
-    return;
-  }
+  //   if (inputValue === '') {
+  //     return;
+  //   }
   const BASE_URL = 'https://pixabay.com';
   const END_POINT = '/api/';
   const params = new URLSearchParams({

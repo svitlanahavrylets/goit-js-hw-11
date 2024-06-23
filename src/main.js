@@ -3,41 +3,56 @@ import iziToast from 'izitoast';
 // Додатковий імпорт стилів
 import 'izitoast/dist/css/iziToast.min.css';
 
-// Описаний у документації
-import SimpleLightbox from 'simplelightbox';
-// Додатковий імпорт стилів
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
 import { getImages } from './js/pixabay-api';
-import { imagesTemplate } from './js/render-functions';
+import { showLoader, imagesTemplate, hideLoader } from './js/render-functions';
 
-const refs = {
+export const refs = {
   form: document.querySelector('.form'),
   input: document.querySelector('.input'),
   button: document.querySelector('button'),
-  //   gallery: document.querySelector('.images-gallery'),
+  gallery: document.querySelector('.gallery'),
+  loader: document.querySelector('.loader'),
 };
 
 refs.form.addEventListener('submit', e => {
   e.preventDefault();
   const inputValue = e.target.elements.text.value.trim();
+  if (inputValue === '') {
+    refs.gallery.innerHTML = ' ';
+    iziToast.warning({
+      title: 'Warning',
+      message: 'Please, enter the query.',
+      backgroundColor: '#ef4040',
+      layout: 2,
+      position: 'topRight',
+      displayMode: 'once',
+    });
+    return;
+  }
 
+  showLoader();
+  refs.gallery.innerHTML = ' ';
   getImages(inputValue)
     .then(data => {
       if (data.hits.length === 0) {
-        iziToast.show({
-          //   title: '',
+        iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
+          layout: 2,
+          displayMode: 'once',
+          backgroundColor: '#ef4040',
+          progressBarColor: '#B51B1B',
+          position: 'topRight',
         });
-        console.log(
-          'Sorry, there are no images matching your search query. Please try again!'
-        );
+        hideLoader();
+        refs.form.reset();
+        return;
       }
-      const galleryEl = document.querySelector('.images-gallery');
-      const markup = imagesTemplate(data);
-      console.log(markup);
-      galleryEl.insertAdjacentElement('beforeend', markup);
+      hideLoader();
+      refs.form.reset();
+      imagesTemplate(data.hits);
     })
-    .catch(err => {});
+    .catch(err => {
+      console.log(err);
+    });
 });
