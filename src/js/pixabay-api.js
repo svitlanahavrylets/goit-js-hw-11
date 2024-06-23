@@ -1,7 +1,4 @@
 export function getImages(inputValue) {
-  //   if (inputValue === '') {
-  //     return;
-  //   }
   const BASE_URL = 'https://pixabay.com';
   const END_POINT = '/api/';
   const params = new URLSearchParams({
@@ -15,6 +12,14 @@ export function getImages(inputValue) {
   return fetch(url)
     .then(res => res.json())
     .catch(err => {
-      console.log(err);
+      iziToast.error({
+        title: 'Error',
+        message: `${err}`,
+        layout: 2,
+        displayMode: 'once',
+        backgroundColor: '#ef4040',
+        progressBarColor: '#B51B1B',
+        position: 'topRight',
+      });
     });
 }

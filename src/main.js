@@ -53,6 +53,14 @@ refs.form.addEventListener('submit', e => {
       imagesTemplate(data.hits);
     })
     .catch(err => {
-      console.log(err);
+      iziToast.error({
+        title: 'Error',
+        message: `${err}`,
+        layout: 2,
+        displayMode: 'once',
+        backgroundColor: '#ef4040',
+        progressBarColor: '#B51B1B',
+        position: 'topRight',
+      });
     });
 });
